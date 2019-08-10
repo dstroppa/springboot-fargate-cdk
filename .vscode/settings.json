@@ -2,5 +2,13 @@
     "editor.tabSize": 2,
     "editor.insertSpaces": true,
     "explorer.autoReveal": false,
-    "editor.minimap.enabled": false
+    "editor.minimap.enabled": false,
+    "files.exclude": {
+        "**/.classpath": true,
+        "**/.project": true,
+        "**/.settings": true,
+        "**/.factorypath": true
+    },
+    "maven.view": "flat",
+    "java.configuration.updateBuildConfiguration": "interactive"
 }

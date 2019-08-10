@@ -1,0 +1,16 @@
+{
+  "configurations": [
+
+
+    {
+      "type": "java",
+      "name": "Spring Boot-JpademoApplication<jpademo>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "console": "internalConsole",
+      "mainClass": "com.springgroot.jpademo.JpademoApplication",
+      "projectName": "jpademo",
+      "args": "--spring.profiles.active=local"
+    }
+  ]
+}

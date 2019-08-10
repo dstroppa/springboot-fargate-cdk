@@ -1,5 +1,5 @@
 # Step : Test and packages
-FROM maven:3.5.3-jdk-8-alpine as build
+FROM maven:3.6.1-jdk-8-alpine as build
 WORKDIR /build
 COPY pom.xml .
 RUN mvn dependency:go-offline
