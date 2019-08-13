@@ -12,7 +12,7 @@ custom metric autoscaling with target tracking.
 ```
 # Prepwork
 
-Use AWS Cloud9.
+Use AWS Cloud 9 or Amazon workspace (need to add 8.8.8.8 in /etc/resolv.conf).
 
 
 ## Create a DB password for RDS .. replace it with your own password value
@@ -29,10 +29,10 @@ cd springboot-fargate-cdk
 npm install
 
 # do this only one time per region, this will bootstrap S3 bucket for CDK
-npx cdk@1.0.0 bootstrap 
+npx cdk@1.3.0 bootstrap 
 
 #this will use cdk to deploy base infra, rds, and spring boot app on Fargate
-npx cdk@1.0.0 deploy  --require-approval never  "*"
+npx cdk@1.3.0 deploy  --require-approval never  "*"
 
 ```
 
@@ -40,7 +40,8 @@ npx cdk@1.0.0 deploy  --require-approval never  "*"
 This is a spring boot CRUD app with RDS (mysql).
 
 ```
-# install httpie: https://httpie.org/doc/1.0.2
+# If you use workspace, you can install Postman.
+# Otherwise, install httpie: https://httpie.org/doc/1.0.2
 # on Cloud9: sudo pip install --upgrade httpie
 # use httpie to POST to ALB endpoint / api/notes , eg:
 
@@ -100,6 +101,6 @@ while true; do aws cloudwatch put-metric-data --metric-name CDKTestingCustomMetr
 ### Clean up
 
 ```
-npx cdk@1.0.0 destroy
+npx cdk@1.3.0 destroy
 
 ```
