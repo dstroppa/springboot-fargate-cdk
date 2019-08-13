@@ -44,17 +44,33 @@ class MySQLDatabase extends cdk.Stack {
       version: 1
     })
 
-    this.rds = new rds.CfnDBInstance(this, "mysql-single-instance", {
-      allocatedStorage: '80',
-      dbInstanceClass: 'db.m5.large',
-      engine: 'mysql',
-      dbName: 'notes_app',
-      engineVersion: '5.7.25',
+    //   this.rds = new rds.CfnDBInstance(this, "mysql-single-instance", {
+    //     allocatedStorage: '80',
+    //     dbInstanceClass: 'db.m5.large',
+    //     engine: 'mysql',
+    //     dbName: 'notes_app',
+    //     engineVersion: '5.7.25',
+    //     masterUsername: 'dbaadmin',
+    //     masterUserPassword: ssmdbpassword.stringValue,
+    //     dbSubnetGroupName: subnetGroup.ref,
+    //     vpcSecurityGroups: [dbsecuritygroup.securityGroupId]
+    //   })
+    // }
+    this.dbCluster = new rds.CfnDBCluster(this, "myDBCluster", {
+      engine: 'aurora',
+      engineMode: 'serverless',
+      databaseName: 'notes_app',
       masterUsername: 'dbaadmin',
       masterUserPassword: ssmdbpassword.stringValue,
       dbSubnetGroupName: subnetGroup.ref,
-      vpcSecurityGroups: [dbsecuritygroup.securityGroupId]
-    })
+      vpcSecurityGroupIds: [dbsecuritygroup.securityGroupId],
+      scalingConfiguration: {
+        autoPause: true,
+        minCapacity: 2,
+        maxCapacity: 8,
+        secondsUntilAutoPause: 600
+      }
+    });
   }
 }
 
@@ -71,7 +87,7 @@ class FargateService extends cdk.Stack {
       memoryLimitMiB: '1024',
       environment: {
         // AWS_XRAY_CONTEXT_MISSING: 'LOG_ERROR'
-        'springdatasourceurl': `jdbc:mysql://` + props.springgrootDB.attrEndpointAddress + `:3306/notes_app?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true`,
+        'springdatasourceurl': `jdbc:mysql://` + props.springgrootDB.dbCluster.attrEndpointAddress + `:3306/notes_app?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true`,
         'springdatasourceusername': 'dbaadmin'
       },
       createLogs: true
@@ -137,7 +153,7 @@ class FargateService extends cdk.Stack {
     this.dashboard = new cloudwatch.Dashboard(this, "springgroot2-dashboard");
     this.dashboard.addWidgets(
       new cloudwatch.TextWidget({
-        markdown: '# Springboot on Fargate Demo Dashboard',
+        markdown: '# Springboot on Fargate Dashboard',
         width: 24
       })
     )
@@ -256,7 +272,7 @@ class App extends cdk.App {
 
     this.springbootApp = new FargateService(this, 'springgroot-fargate-svc', {
       cluster: this.baseResources.cluster,
-      springgrootDB: this.springgrootDB.rds
+      springgrootDB: this.springgrootDB
     })
   }
 }
