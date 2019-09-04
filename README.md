@@ -1,5 +1,5 @@
 # What is this?
-```
+
 no more YAML. use your favorite programming language (JS, python and more) to build :
 
 Build out the Fargate infrastructure for your  spring boot application, 
@@ -9,7 +9,6 @@ Secret env variable in task definition (RDS Password),
 cloudwatch dashboard and 
 custom metric autoscaling with target tracking.
 
-```
 # Prepwork
 
 Use AWS Cloud 9 or Amazon workspace (need to add 8.8.8.8 in /etc/resolv.conf).
@@ -25,14 +24,15 @@ aws ssm put-parameter --name "/mysqlpassword" --value "PassW0rd~~866" --type "Se
 ## Deploy using aws cdk
 ```bash
 
-cd springboot-fargate-cdk
+cd springboot-fargate-cdk/cdk
+npm install -g aws-cdk
 npm install
 
 # do this only one time per region, this will bootstrap S3 bucket for CDK
-npx cdk@1.3.0 bootstrap 
+cdk bootstrap 
 
 #this will use cdk to deploy base infra, rds, and spring boot app on Fargate
-npx cdk@1.3.0 deploy  --require-approval never  "*"
+cdk deploy "*"
 
 ```
 
