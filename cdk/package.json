@@ -18,7 +18,7 @@
     "@aws-cdk/aws-kms": "^1.6.1",
     "@aws-cdk/aws-rds": "^1.6.1",
     "@aws-cdk/aws-ssm": "^1.6.1",
-    "aws-cdk": "^1.6.1",
+    "aws-cdk": "^1.180.0",
     "ts-node": "^8.1.0",
     "typescript": "~3.5.3"
   },
